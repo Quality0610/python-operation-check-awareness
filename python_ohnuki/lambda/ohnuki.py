@@ -10,6 +10,7 @@ def lambda_handler(event, context):
 
 
 def get_internet():
+    // 後で考える
     url = "www.xxxyyyzzz.com"
     response = requests.get(url)
     print(response)
