@@ -8,7 +8,6 @@ s3 = boto3.resource('s3')
 
 def lambda_handler(event, context):
     get_internet()
-    }
 
 
 def get_internet():
