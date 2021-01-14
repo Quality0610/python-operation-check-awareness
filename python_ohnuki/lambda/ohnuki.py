@@ -2,10 +2,12 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
+import boto3
+
+s3 = boto3.resource('s3')
+
 def lambda_handler(event, context):
     get_internet()
-
-
     }
 
 
@@ -17,3 +19,4 @@ def get_internet():
     html = response.text
     print(html)
     soup = BeautifulSoup(html, 'html.parser')
+
