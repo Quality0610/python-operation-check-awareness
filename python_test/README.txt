@@ -1,7 +1,8 @@
 dockerとDjangoでの簡易アプリのメモ書き
 
-// 設定ディレクトリ
-example
+// 設定(プロジェクト)ディレクトリ
+ベストプラクティス的にプロジェクトディレクトリ名はconfigとかの名称がいいらしい
+config
 
 // アプリディレクトリ
 example_app
@@ -9,7 +10,7 @@ example_app
 Dockerfileとdocker-compose.ymlはsjisにする、日本語コメントを書いている影響かdocker-compose runが失敗する
 
 // 設定(プロジェクト)ディレクトリの作成(最初に打つコマンド)
-docker-compose run --rm web1 django-admin.py startproject example .
+docker-compose run --rm web1 django-admin.py startproject config .
 
 // アプリ作成コマンド
 docker-compose run --rm web1 python manage.py startapp example_app
