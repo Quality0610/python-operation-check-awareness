@@ -1,9 +1,20 @@
 dockerとDjangoでの簡易アプリのメモ書き
 
+ベストプラクティス：
 // 設定(プロジェクト)ディレクトリ
-ベストプラクティス的にプロジェクトディレクトリ名はconfigとかの名称がいいらしい
+的にプロジェクトディレクトリ名はconfigとかの名称がいいらしい
 config
 
+// urls.py
+URLはアプリごとに設定する
+
+// ビュー
+クラスベースで作成すべき
+Genericビューとしてさまざまな用途のクラスの恩恵を受けられる
+generic viewを利用することで見通しをよくすることができる
+
+
+ディレクトリ説明：
 // アプリディレクトリ
 example_app
 
@@ -16,7 +27,7 @@ docker-compose run --rm web1 django-admin.py startproject config .
 docker-compose run --rm web1 python manage.py startapp example_app
 
 
-<参考>
+<参考：よく使うコマンド>
 // コンテナ一覧
 docker container ls
 
@@ -37,6 +48,8 @@ docker exec -i -t コンテナ名 bash
 
 https://docs.docker.jp/compose/django.html
 
+---------------------------------------------------------------------------------------------------
+設定ファイルの説明
 
 <Dockerfile>
 FROM python:3.6
