@@ -1,44 +1,38 @@
 import json
 import requests
-# from import BeautifulSoup
 import datetime
-
-
 import boto3
 
 s3 = boto3.resource('s3')
+bucket = s3.Bucket('unko-sample')
     
 def lambda_handler(event, context):
     print('unko')
-    data = get_internet()
-    # print(file)
-    upload_test(data)
-    # file = get_internet()
-    # print('unko')
-    # upload_test(file)
-    
+    # data = get_internet()
+    # upload_test(data)
+    compare_file()
+
 def get_internet():
     url = "http://michaelsan.livedoor.biz/"
     # urlに対してgetリクエストを投げる
     response = requests.get(url)
-    # print(response)
     html = response.text
     return html
-    # print(html)
-    # soup = BeautifulSoup(html, 'html.parser')
-    # return soup
 
 def upload_test(data):
-    today = datetime.date.today().strftime('%Y%m%d')
-    print(today)
+    now = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
+    print(now)
+    
     # tmpを入れないとエラー
-    file = open('/tmp/' + today + '.txt', 'w')
+    file = open('/tmp/' + now + '.txt', 'w')
     file.write(data)
     file.close()
-
-    # s3 = boto3.resource('s3')
     
-    # for bucket in s3.buckets.all():
-    #     print(bucket.name)
-    bucket = s3.Bucket('unko-sample')
-    bucket.upload_file("test/", file)
+    bucket.upload_file('/tmp/' + now + '.txt', 'test/' + now + '.txt')
+    
+def compare_file():
+    print('hoge')
+    objects_iter = bucket.objects.all()
+    print(objects_iter)
+    # for object in objects_iter:
+        
