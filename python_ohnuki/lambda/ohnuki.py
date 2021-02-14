@@ -10,13 +10,12 @@ key = "test/"
 webhook_url = ''
     
 def lambda_handler(event, context):
-    print('unko')
-    # data = get_internet()
-    # upload_test(data)
-    compare_file()
+    data = get_internet()
+    upload_test(data)
+    compare_file_and_notice()
 
 def get_internet():
-    url = "http://michaelsan.livedoor.biz/"
+    url = ''
     # urlに対してgetリクエストを投げる
     response = requests.get(url)
     html = response.text
@@ -24,7 +23,6 @@ def get_internet():
 
 def upload_test(data):
     now = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
-    print(now)
     
     # tmpを入れないとエラー
     file = open('/tmp/' + now, 'w')
@@ -33,8 +31,8 @@ def upload_test(data):
     
     bucket.upload_file('/tmp/' + now, key + now)
     
-def compare_file():
-    print('hoge')
+def compare_file_and_notice():
+
     objs = bucket.meta.client.list_objects_v2(
         Bucket = bucket_name,
         Prefix = key
@@ -86,8 +84,8 @@ def compare_file():
     latest_s3_obj_2 = get_s3file(obj_list[1]["key"])
     
     print("hogehogehogehogehogehogehoge")
-    print(latest_s3_obj_1)
-    print(latest_s3_obj_2)
+    # print(latest_s3_obj_1)
+    # print(latest_s3_obj_2)
     
     if latest_s3_obj_1 != latest_s3_obj_2:
         notice_slack()
@@ -100,6 +98,8 @@ def get_s3file(file_name):
 
     
 def notice_slack():
-    slack = slackweb.Slack(url = webhook_url)
-    slack.notify(text="更新されましたよ")
+    text = "更新されましたよ"
     
+    requests.post(webhook_url, data = json.dumps({
+        "text": text
+    }))    
