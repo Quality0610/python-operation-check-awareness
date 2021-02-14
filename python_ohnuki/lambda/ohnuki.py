@@ -5,6 +5,9 @@ import boto3
 
 s3 = boto3.resource('s3')
 bucket = s3.Bucket('unko-sample')
+bucket_name = 'unko-sample'
+key = "test/"
+webhook_url = ''
     
 def lambda_handler(event, context):
     print('unko')
@@ -24,17 +27,17 @@ def upload_test(data):
     print(now)
     
     # tmpを入れないとエラー
-    file = open('/tmp/' + now + '.txt', 'w')
+    file = open('/tmp/' + now, 'w')
     file.write(data)
     file.close()
     
-    bucket.upload_file('/tmp/' + now + '.txt', 'test/' + now + '.txt')
+    bucket.upload_file('/tmp/' + now, key + now)
     
 def compare_file():
     print('hoge')
     objs = bucket.meta.client.list_objects_v2(
-        Bucket='unko-sample',
-        Prefix='test/'
+        Bucket = bucket_name,
+        Prefix = key
     )
 
     obj_list = []
@@ -76,13 +79,27 @@ def compare_file():
 
     print('--------------------------------------------')        
     print(obj_list)
+    print(obj_list[0]["key"])
+    print(obj_list[1]["key"])
     
-    for obj in obj_list:
-        print('!!------------------------------------------')        
-        print(obj["key"])
-        print(obj["last_modified"])
+    latest_s3_obj_1 = get_s3file(obj_list[0]["key"])
+    latest_s3_obj_2 = get_s3file(obj_list[1]["key"])
     
-    obj_list[0].["key"] 
-          
-# def notice_slack:
+    print("hogehogehogehogehogehogehoge")
+    print(latest_s3_obj_1)
+    print(latest_s3_obj_2)
+    
+    if latest_s3_obj_1 != latest_s3_obj_2:
+        notice_slack()
+
+def get_s3file(file_name):
+
+    s3_client = boto3.client('s3')
+    response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
+    return response['Body'].read().decode('utf-8')
+
+    
+def notice_slack():
+    slack = slackweb.Slack(url = webhook_url)
+    slack.notify(text="更新されましたよ")
     
