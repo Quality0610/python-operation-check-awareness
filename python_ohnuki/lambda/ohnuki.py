@@ -16,7 +16,6 @@ def lambda_handler(event, context):
     compare_file_and_notice()
 
 def get_internet():
-    # urlに対してgetリクエストを投げる
     response = requests.get(target_url)
     html = response.text
     return html
@@ -77,12 +76,9 @@ def compare_file_and_notice():
             if tmp_dictionary_1["last_modified"] <= o.get('LastModified'):
                 tmp_dictionary_1["key"] = o.get('Key')
                 tmp_dictionary_1["last_modified"] = o.get('LastModified')
-
-    obj_list.append(tmp_dictionary_1)
-    obj_list.append(tmp_dictionary_2)
     
-    latest_s3_obj_1 = get_s3file(obj_list[0]["key"])
-    latest_s3_obj_2 = get_s3file(obj_list[1]["key"])
+    latest_s3_obj_1 = get_s3file(tmp_dictionary_1["key"])
+    latest_s3_obj_2 = get_s3file(tmp_dictionary_1["key"])
         
     if latest_s3_obj_1 != latest_s3_obj_2:
         notice_slack()
