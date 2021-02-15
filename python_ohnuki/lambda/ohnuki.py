@@ -31,7 +31,6 @@ def upload_bucket(data):
     bucket.upload_file('/tmp/' + now, key + now)
     
 def compare_file_and_notice():
-
     objs = bucket.meta.client.list_objects_v2(
         Bucket = bucket_name,
         Prefix = key
