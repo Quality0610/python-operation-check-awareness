@@ -12,7 +12,7 @@ webhook_url = ''
     
 def lambda_handler(event, context):
     data = get_internet()
-    upload_test(data)
+    upload_bucket(data)
     compare_file_and_notice()
 
 def get_internet():
@@ -21,7 +21,7 @@ def get_internet():
     html = response.text
     return html
 
-def upload_test(data):
+def upload_bucket(data):
     now = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
     
     # tmpを入れないとエラー
