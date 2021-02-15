@@ -4,8 +4,8 @@ import datetime
 import boto3
 
 s3 = boto3.resource('s3')
-bucket = s3.Bucket('unko-sample')
 bucket_name = 'unko-sample'
+bucket = s3.Bucket(bucket_name)
 key = "test/"
 target_url = ''
 webhook_url = ''
