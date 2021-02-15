@@ -78,7 +78,7 @@ def compare_file_and_notice():
                 tmp_dictionary_1["last_modified"] = o.get('LastModified')
     
     latest_s3_obj_1 = get_s3file(tmp_dictionary_1["key"])
-    latest_s3_obj_2 = get_s3file(tmp_dictionary_1["key"])
+    latest_s3_obj_2 = get_s3file(tmp_dictionary_2["key"])
         
     if latest_s3_obj_1 != latest_s3_obj_2:
         notice_slack()
