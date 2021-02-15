@@ -7,6 +7,7 @@ s3 = boto3.resource('s3')
 bucket = s3.Bucket('unko-sample')
 bucket_name = 'unko-sample'
 key = "test/"
+target_url = ''
 webhook_url = ''
     
 def lambda_handler(event, context):
@@ -15,9 +16,8 @@ def lambda_handler(event, context):
     compare_file_and_notice()
 
 def get_internet():
-    url = ''
     # urlに対してgetリクエストを投げる
-    response = requests.get(url)
+    response = requests.get(target_url)
     html = response.text
     return html
 
@@ -41,13 +41,12 @@ def compare_file_and_notice():
     obj_list = []
     tmp_dictionary_1 = {}
     tmp_dictionary_2 = {}
+    tmp = {}
     loop_first_f = True
     loop_second_f = True
     
     # 更新時刻が最新のオブジェクト2つをobj_listに入れる
     for o in objs.get('Contents'):
-        print(o.get('Key'))
-        print(o.get('LastModified'))
         
         if loop_first_f:
             tmp_dictionary_1 = {
@@ -64,29 +63,27 @@ def compare_file_and_notice():
             loop_second_f = False
             
         else:
+            if tmp_dictionary_1["last_modified"] >= tmp_dictionary_2["last_modified"]:
+                tmp = {
+                    "key": tmp_dictionary_1["key"],
+                    "last_modified": tmp_dictionary_1["last_modified"]
+                } 
+                
+                tmp_dictionary_1["key"] = tmp_dictionary_2["key"]
+                tmp_dictionary_1["last_modified"] = tmp_dictionary_2["last_modified"]
+                tmp_dictionary_2["key"] = tmp["key"]
+                tmp_dictionary_2["last_modified"] = tmp["last_modified"]
+                
             if tmp_dictionary_1["last_modified"] <= o.get('LastModified'):
-                tmp_dictionary_1["key"] = o.get('Key')    
+                tmp_dictionary_1["key"] = o.get('Key')
                 tmp_dictionary_1["last_modified"] = o.get('LastModified')
-              
-            elif tmp_dictionary_2["last_modified"] <= o.get('LastModified'):
-                tmp_dictionary_2["key"] = o.get('Key')    
-                tmp_dictionary_2["last_modified"] = o.get('LastModified')
-            
+
     obj_list.append(tmp_dictionary_1)
     obj_list.append(tmp_dictionary_2)
-
-    print('--------------------------------------------')        
-    print(obj_list)
-    print(obj_list[0]["key"])
-    print(obj_list[1]["key"])
     
     latest_s3_obj_1 = get_s3file(obj_list[0]["key"])
     latest_s3_obj_2 = get_s3file(obj_list[1]["key"])
-    
-    print("hogehogehogehogehogehogehoge")
-    # print(latest_s3_obj_1)
-    # print(latest_s3_obj_2)
-    
+        
     if latest_s3_obj_1 != latest_s3_obj_2:
         notice_slack()
 
@@ -95,7 +92,6 @@ def get_s3file(file_name):
     s3_client = boto3.client('s3')
     response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
     return response['Body'].read().decode('utf-8')
-
     
 def notice_slack():
     text = "更新されましたよ"
