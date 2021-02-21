@@ -14,6 +14,7 @@ Genericビューとしてさまざまな用途のクラスの恩恵を受けら�
 generic viewを利用することで見通しをよくすることができる
 
 
+
 ディレクトリ説明：
 // アプリディレクトリ
 example_app
@@ -25,6 +26,9 @@ docker-compose run --rm app1 django-admin.py startproject config .
 
 // アプリ作成コマンド
 docker-compose run --rm app1 python manage.py startapp example_app
+
+// runserverはdocker-compose up
+docker-compose up
 
 
 <参考：よく使うコマンド>
@@ -83,3 +87,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+
+# settings.py
+DEBUG = TRUEの部分はアプリ公開時はFALSEにする
+ALLOWED_HOSTS:指定したサーバからのアクセスの許可
