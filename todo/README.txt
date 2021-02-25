@@ -32,6 +32,8 @@ docker-compose run --rm todo python manage.py startapp todo_app
 // runserverはdocker-compose up
 docker-compose up
 
+// makemigratiton
+docker-compose run --rm todo python manage.py makemigrations
 
 <参考：よく使うコマンド>
 // コンテナ一覧
