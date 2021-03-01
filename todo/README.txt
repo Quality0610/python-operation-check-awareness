@@ -35,6 +35,16 @@ docker-compose up
 // makemigratiton
 docker-compose run --rm todo python manage.py makemigrations
 
+// migrate
+docker-compose run --rm todo python manage.py migrate
+
+// createsuperuser
+docker-compose run --rm todo python manage.py createsuperuser
+
+コマンド順番
+1.migrate
+2.docker-compose up
+
 <参考：よく使うコマンド>
 // コンテナ一覧
 docker container ls
@@ -44,6 +54,9 @@ docker ps
 
 // 停止コンテナも見たい時
 docker ps -a
+
+// image一覧
+docker image ls
 
 // image削除
 docker rmi <image_id>
