@@ -44,6 +44,7 @@ docker-compose run --rm todo python manage.py createsuperuser
 コマンド順番
 1.migrate
 2.docker-compose up
+3.変更後のmigrate適用など
 
 <参考：よく使うコマンド>
 // コンテナ一覧
