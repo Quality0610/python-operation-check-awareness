@@ -13,33 +13,25 @@ URLはアプリごとに設定する
 Genericビューとしてさまざまな用途のクラスの恩恵を受けられる
 generic viewを利用することで見通しをよくすることができる
 
-
-
-ディレクトリ説明：
-// アプリディレクトリ
-example_app
-
 Dockerfileとdocker-compose.ymlはsjisにする、日本語コメントを書いている影響かdocker-compose runが失敗する
 
 // 設定(プロジェクト)ディレクトリの作成(最初に打つコマンド)
-docker-compose run --rm web1 django-admin.py startproject config .
-docker-compose run --rm todo django-admin.py startproject todo_project .
+docker-compose run --rm sns django-admin.py startproject sns_project .
 
 // アプリ作成コマンド
-docker-compose run --rm web1 python manage.py startapp example_app
-docker-compose run --rm todo python manage.py startapp todo_app
+docker-compose run --rm sns python manage.py startapp sns_app
 
 // runserverはdocker-compose up
 docker-compose up
 
 // makemigratiton
-docker-compose run --rm todo python manage.py makemigrations
+docker-compose run --rm sns python manage.py makemigrations
 
 // migrate
-docker-compose run --rm todo python manage.py migrate
+docker-compose run --rm sns python manage.py migrate
 
 // createsuperuser
-docker-compose run --rm todo python manage.py createsuperuser
+docker-compose run --rm sns python manage.py createsuperuser
 
 コマンド順番
 1.migrate
@@ -91,20 +83,6 @@ RUN pip install -r requirements.txt
 # ホストPCの各種ファイルをcodeディレクトリにコピーする
 # COPY . /code/
 
-<docker-compose.yml>
-version: '3'  # Docker Composeのバージョン
-services:
-  db:
-    image: postgres
-  web1:  # コンテナに名前をつける
-    build: .  # Dockerfileがあるディレクトリへのパス
-    command: python3 manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code  # ホストPCのカレントディレクトリとコンテナ内のcodeディレクトリを同期させる
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
 
 # settings.py
 DEBUG = TRUEの部分はアプリ公開時はFALSEにする
