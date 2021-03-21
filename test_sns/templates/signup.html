@@ -3,6 +3,9 @@
 {% block content %}    
 <form class="form-signin" method='POST' action=''>{% csrf_token %}
   <h1 class="h3 mb-3 fw-normal">サインアップする</h1>
+  {% if error %}
+  {{ error }}
+  {% endif %}
   <label for="inputEmail" class="visually-hidden">メールアドレス</label>
   <input type="text" id="inputEmail" class="form-control" name="username" placeholder="Username" required autofocus>
   <label for="inputPassword" class="visually-hidden">パスワード</label>
